@@ -1,18 +1,17 @@
-name: Test
+---
+name: Frontend CI
 
 on:
   push:
-    branches:
-      - beta
-      - main
-      - renovate/**
+    branches: [main]
   pull_request:
-    branches:
-      - beta
-      - main
 
 env:
   NODE_VERSION: 18
+
+defaults:
+  run:
+    working-directory: ./frontend
 
 jobs:
   lint:
@@ -35,7 +34,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
@@ -60,7 +60,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile

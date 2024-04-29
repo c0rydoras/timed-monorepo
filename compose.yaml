@@ -3,7 +3,7 @@ services:
   backend:
     user: "${UID:?Set UID env variable to your user id}"
     build:
-      context: .
+      context: ./backend
       target: dev
     depends_on:
       - mailhog
@@ -16,7 +16,7 @@ services:
       - DJANGO_DATABASE_PORT=5432
       - STATIC_ROOT=/var/www/static
     volumes:
-      - ./:/app
+      - ./backend:/app
     ports:
       - 8000:8080
       - 8081:8081
@@ -24,7 +24,8 @@ services:
       - timed.local
 
   frontend:
-    image: ghcr.io/adfinis/timed-frontend:latest
+    build:
+      context: ./frontend
     ports:
       - 4200:80
     environment:
