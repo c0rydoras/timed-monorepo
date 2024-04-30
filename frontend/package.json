@@ -17,7 +17,7 @@
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint --config .eslintrc.js .",
     "lint:js:fix": "eslint --config .eslintrc.js . --fix",
-    "start": "ember server --proxy http://localhost:8000",
+    "start": "ember server --proxy http://timed.local/api/v1 --secure-proxy=false",
     "test": "npm-run-all test:*",
     "test:ember": "ember test"
   },
