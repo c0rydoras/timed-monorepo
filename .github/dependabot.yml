@@ -35,6 +35,16 @@ updates:
       prefix: chore
       include: scope
 
+  - package-ecosystem: docker
+    directory: "/frontend"
+    schedule:
+      interval: daily
+      time: "12:00"
+      timezone: "Europe/Zurich"
+    commit-message:
+      prefix: chore
+      include: scope
+
   - package-ecosystem: npm
     directory: "/frontend"
     schedule:
