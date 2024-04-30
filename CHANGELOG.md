@@ -1,6 +1,6 @@
 # CHANGELOG
 
-This has been discontinued as it is redundand. The new Changelog starting with v4 can be viewed [here](https://github.com/adfinis/timed/releases/)
+This has been discontinued as it is redundant. The new Changelog starting with v4 can be viewed [here](https://github.com/adfinis/timed/releases/)
 
 ## pre-monorepo changelogs
 
