@@ -1,0 +1,83 @@
+---
+name: Frontend CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  NODE_VERSION: 18
+
+defaults:
+  run:
+    working-directory: ./frontend
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the prod image
+        run: |
+          docker build .
+
+  lint:
+    runs-on: [ubuntu-latest]
+    timeout-minutes: 5
+
+    strategy:
+      matrix:
+        target: [js, hbs]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.4.0
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Lint ${{ matrix.target }}
+        run: pnpm lint:${{ matrix.target }}
+
+  test:
+    needs: [lint]
+    runs-on: [ubuntu-latest]
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.4.0
+        with:
+          version: ^7.17.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run tests
+        run: pnpm test
+        env:
+          COVERAGE: true
+
+      - name: upload coverage report to codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
